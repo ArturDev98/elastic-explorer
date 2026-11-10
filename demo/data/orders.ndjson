@@ -1,0 +1,16 @@
+{"index":{"_id":"5001"}}
+{"orderId":5001,"customerId":"C-1001","status":"DELIVERED","total":184.5,"channel":"web","createdAt":"2026-09-02T10:00:00Z","updatedAt":"2026-09-05T15:00:00Z","items":[{"sku":"SKU-100","quantity":2,"unitPrice":42.25},{"sku":"SKU-300","quantity":1,"unitPrice":100}]}
+{"index":{"_id":"5002"}}
+{"orderId":5002,"customerId":"C-1002","status":"PAID","total":1250,"channel":"app","createdAt":"2026-10-11T09:20:00Z","updatedAt":"2026-10-11T09:25:00Z","items":[{"sku":"SKU-200","quantity":50,"unitPrice":25}]}
+{"index":{"_id":"5003"}}
+{"orderId":5003,"customerId":"C-1001","status":"CANCELLED","total":42.25,"channel":"web","createdAt":"2026-10-14T18:40:00Z","updatedAt":"2026-10-14T19:00:00Z","items":[{"sku":"SKU-100","quantity":1,"unitPrice":42.25}]}
+{"index":{"_id":"5004"}}
+{"orderId":5004,"customerId":"C-1004","status":"SHIPPED","total":310,"channel":"tienda","createdAt":"2026-10-20T11:10:00Z","updatedAt":"2026-10-22T08:00:00Z","items":[{"sku":"SKU-400","quantity":2,"unitPrice":155}]}
+{"index":{"_id":"5005"}}
+{"orderId":5005,"customerId":"C-1005","status":"PAID","total":89.9,"channel":"app","createdAt":"2026-10-28T09:10:00Z","updatedAt":"2026-10-28T09:12:00Z","items":[{"sku":"SKU-500","quantity":1,"unitPrice":89.9}]}
+{"index":{"_id":"5006"}}
+{"orderId":5006,"customerId":"C-1006","status":"PENDING","total":2600,"channel":"web","createdAt":"2026-11-01T12:00:00Z","updatedAt":"2026-11-01T12:00:00Z","items":[{"sku":"SKU-200","quantity":80,"unitPrice":25},{"sku":"SKU-600","quantity":4,"unitPrice":150}]}
+{"index":{"_id":"5007"}}
+{"orderId":5007,"customerId":"C-1002","status":"DELIVERED","total":500,"channel":"app","createdAt":"2026-08-15T14:30:00Z","updatedAt":"2026-08-18T10:00:00Z","items":[{"sku":"SKU-200","quantity":20,"unitPrice":25}]}
+{"index":{"_id":"5008"}}
+{"orderId":5008,"customerId":"C-1004","status":"PAID","total":155,"channel":"web","createdAt":"2026-11-05T16:45:00Z","updatedAt":"2026-11-05T16:50:00Z","items":[{"sku":"SKU-400","quantity":1,"unitPrice":155}]}

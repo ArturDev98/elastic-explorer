@@ -1,0 +1,99 @@
+<div class="layout">
+  <aside class="panel">
+    <input placeholder="Filtrar índices" [value]="indexFilter()" (input)="indexFilter.set($any($event.target).value)">
+    <ul>
+      @for (i of visibleIndices(); track i.name) {
+        <li [class.on]="selected()?.name === i.name" (click)="open(i)">
+          <span><span class="dot" [class]="healthClass(i.health)"></span>{{ i.name }}</span>
+          <span class="muted">{{ count(i.documents) }}</span>
+        </li>
+      } @empty {
+        <li class="muted">Sin índices</li>
+      }
+    </ul>
+  </aside>
+
+  <section>
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    @if (!selected()) {
+      <div class="panel">
+        <table>
+          <tr><th>Índice</th><th>Salud</th><th class="num">Documentos</th><th class="num">Tamaño</th></tr>
+          @for (i of visibleIndices(); track i.name) {
+            <tr class="link" (click)="open(i)">
+              <td class="mono">{{ i.name }}</td>
+              <td><span class="dot" [class]="healthClass(i.health)"></span>{{ i.health }}</td>
+              <td class="num">{{ count(i.documents) }}</td>
+              <td class="num">{{ bytes(i.bytes) }}</td>
+            </tr>
+          }
+        </table>
+      </div>
+    } @else {
+      <div class="panel head">
+        <div>
+          <h2 class="mono">{{ selected()!.name }}</h2>
+          <span class="muted">
+            {{ count(selected()!.documents) }} documentos · {{ bytes(selected()!.bytes) }}
+            @if (mapping(); as m) { · {{ m.totalFields }} campos }
+          </span>
+        </div>
+        @if (mapping(); as m) {
+          @if (m.suggestedFields.length) {
+            <div class="chips">
+              <span class="muted">★ Búsqueda:</span>
+              @for (s of m.suggestedFields; track s) { <span class="chip">{{ s }}</span> }
+            </div>
+          }
+        }
+      </div>
+
+      @if (mapping()) {
+        <div class="filters">
+          <input placeholder="Filtrar campos por nombre" [value]="fieldFilter()" (input)="fieldFilter.set($any($event.target).value)">
+          <select [value]="typeFilter()" (change)="typeFilter.set($any($event.target).value)">
+            <option value="">Todos los tipos</option>
+            @for (t of types(); track t) { <option [value]="t">{{ t }}</option> }
+          </select>
+          <button (click)="showJson.set(!showJson())">{{ showJson() ? 'Ver árbol' : 'Ver JSON' }}</button>
+        </div>
+
+        <div class="panel">
+          @if (showJson()) {
+            <pre>{{ summaryJson() }}</pre>
+          } @else {
+            <ng-container *ngTemplateOutlet="nodes; context: { $implicit: tree(), depth: 0 }" />
+            @if (!tree().length) { <p class="muted">Ningún campo coincide.</p> }
+          }
+        </div>
+        <p class="muted legend">
+          <span class="type-keyword">keyword</span> y <span class="type-long">long</span> se buscan exactos;
+          <span class="type-text">text</span> se busca exacto en su <span class="mono">.keyword</span> y, si no lo tiene, como frase.
+        </p>
+      }
+    }
+  </section>
+</div>
+
+<ng-template #nodes let-fields let-depth="depth">
+  @for (f of fields; track f.path) {
+    <div class="row" [style.padding-left.px]="12 + depth * 20">
+      @if (f.children.length) {
+        <button class="caret" (click)="toggle(f)">{{ isOpen(f) ? '▾' : '▸' }}</button>
+        <span class="mono name">{{ f.name }}</span>
+        <span class="mono type-object">{{ f.type }} ({{ f.children.length }})</span>
+      } @else {
+        <span class="caret"></span>
+        <span class="mono name" [class.suggested]="isSuggested(f)">{{ f.name }}@if (isSuggested(f)) { ★}</span>
+        <span class="mono" [class]="'type-' + f.type">{{ f.type }}</span>
+        <span class="mono muted">@for (s of f.subfields; track s) {.{{ s }} }</span>
+      }
+    </div>
+    @if (f.children.length && isOpen(f)) {
+      <ng-container *ngTemplateOutlet="nodes; context: { $implicit: f.children, depth: depth + 1 }" />
+    }
+  }
+</ng-template>

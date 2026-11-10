@@ -1,0 +1,82 @@
+<section class="panel form">
+  <label>
+    <span>Índice</span>
+    <select [ngModel]="index()" (ngModelChange)="selectIndex($event)">
+      <option value="">Elige un índice…</option>
+      @for (i of indices(); track i.name) {
+        <option [value]="i.name">{{ i.name }} ({{ count(i.documents) }})</option>
+      }
+    </select>
+  </label>
+
+  <label>
+    <span>Campo</span>
+    <select [ngModel]="field()" (ngModelChange)="field.set($event)" [disabled]="!mapping()">
+      @for (f of fields(); track f.path) {
+        <option [value]="f.path">{{ mapping()!.suggestedFields.includes(f.path) ? '★ ' : '' }}{{ f.path }} · {{ f.type }}</option>
+      }
+    </select>
+  </label>
+
+  <label class="grow">
+    <span>
+      Valor
+      @if (selectedField(); as f) {
+        <small class="muted">{{ f.type === 'text' ? 'varios separados por coma o salto de línea' : 'varios separados por coma o espacio' }}</small>
+      }
+    </span>
+    <input [ngModel]="value()" (ngModelChange)="value.set($event)" (keyup.enter)="search()"
+           placeholder="Ej. C-1001, C-1002" [disabled]="!mapping()">
+  </label>
+
+  <label>
+    <span>Por página</span>
+    <select [ngModel]="size()" (ngModelChange)="size.set(+$event)">
+      @for (s of pageSizes; track s) {
+        <option [value]="s">{{ s }}</option>
+      }
+    </select>
+  </label>
+
+  <button class="primary" (click)="search()" [disabled]="loading() || !value().trim() || !field()">
+    {{ loading() ? 'Buscando…' : 'Buscar' }}
+  </button>
+</section>
+
+@if (error()) {
+  <p class="error">{{ error() }}</p>
+}
+
+@if (result(); as r) {
+  <section class="summary">
+    <div>
+      <strong>{{ count(r.total) }}{{ r.exactTotal ? '' : '+' }}</strong> documentos
+      @if (r.sortedBy) {
+        <span class="muted">· ordenados por {{ r.sortedBy }} (más reciente primero)</span>
+      }
+    </div>
+    <div class="actions">
+      <div class="toggle">
+        <button [class.on]="view() === 'table'" (click)="view.set('table')">Tabla</button>
+        <button [class.on]="view() === 'json'" (click)="view.set('json')">JSON</button>
+      </div>
+      <button (click)="copyCurl()" title="La misma búsqueda como comando curl">
+        {{ copied() ? '¡Copiado!' : 'Copiar curl' }}
+      </button>
+    </div>
+  </section>
+
+  @for (doc of r.documents; track doc.id) {
+    <app-document [doc]="doc" [types]="types()" [view]="view()" />
+  } @empty {
+    <p class="muted">Sin resultados para esa búsqueda.</p>
+  }
+
+  @if (totalPages() > 1) {
+    <nav class="pager">
+      <button (click)="search(r.page - 1)" [disabled]="r.page === 0 || loading()">Anterior</button>
+      <span class="muted">Página {{ r.page + 1 }} de {{ totalPages() }}</span>
+      <button (click)="search(r.page + 1)" [disabled]="r.page + 1 >= totalPages() || loading()">Siguiente</button>
+    </nav>
+  }
+}

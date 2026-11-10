@@ -1,0 +1,12 @@
+{"index":{"_id":"SKU-100"}}
+{"sku":"SKU-100","name":"Café de origen 500 g","category":"despensa","price":42.25,"stock":120,"updatedAt":"2026-10-01T08:00:00Z"}
+{"index":{"_id":"SKU-200"}}
+{"sku":"SKU-200","name":"Caja de empaque reforzada","category":"empaques","price":25,"stock":3400,"updatedAt":"2026-10-12T08:00:00Z"}
+{"index":{"_id":"SKU-300"}}
+{"sku":"SKU-300","name":"Molino manual de acero","category":"accesorios","price":100,"stock":15,"updatedAt":"2026-09-20T08:00:00Z"}
+{"index":{"_id":"SKU-400"}}
+{"sku":"SKU-400","name":"Silla ergonómica","category":"oficina","price":155,"stock":42,"updatedAt":"2026-10-22T08:00:00Z"}
+{"index":{"_id":"SKU-500"}}
+{"sku":"SKU-500","name":"Audífonos inalámbricos","category":"tecnología","price":89.9,"stock":0,"updatedAt":"2026-10-28T08:00:00Z"}
+{"index":{"_id":"SKU-600"}}
+{"sku":"SKU-600","name":"Estantería metálica","category":"bodega","price":150,"stock":8,"updatedAt":"2026-11-01T08:00:00Z"}

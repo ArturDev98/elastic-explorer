@@ -1,0 +1,42 @@
+server:
+  port: ${PORT:8090}
+  servlet:
+    session:
+      cookie:
+        # Un nombre por clúster permite tener abiertas varias instancias en el mismo navegador.
+        name: SESSION_${EXPLORER_ACTIVE_CLUSTER:local}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+explorer:
+  # Vacío: expone todos los clústeres y el front muestra un selector.
+  active-cluster: ${EXPLORER_ACTIVE_CLUSTER:}
+  clusters:
+    local:
+      name: Local (demo)
+      url: ${ELASTIC_LOCAL_URL:http://localhost:9200}
+      username: ${ELASTIC_LOCAL_USER:}
+      password: ${ELASTIC_LOCAL_PASSWORD:}
+    staging:
+      name: Staging
+      url: ${ELASTIC_STAGING_URL:http://localhost:9201}
+      username: ${ELASTIC_STAGING_USER:}
+      password: ${ELASTIC_STAGING_PASSWORD:}
+  # Nunca salen del back, ni en documentos ni en el mapping.
+  hidden-fields: [passwordHash, apiToken, pushToken]
+  default-sort-field: updatedAt
+  indices:
+    orders:
+      search-fields: [orderId, customerId, status]
+    customers:
+      search-fields: [customerId, documentNumber, email]
+  users:
+    - username: ${EXPLORER_ADMIN_USER:admin}
+      password: ${EXPLORER_ADMIN_PASSWORD:admin}
+    - username: ${EXPLORER_SUPPORT_USER:soporte}
+      password: ${EXPLORER_SUPPORT_PASSWORD:soporte}
+      clusters: [local]

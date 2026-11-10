@@ -1,0 +1,36 @@
+# Demo completa: Elasticsearch de un nodo, carga de datos ficticios y el explorador en :8090.
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -qv red"]
+      interval: 10s
+      retries: 30
+
+  seed:
+    image: curlimages/curl:8.10.1
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ES_URL: http://elasticsearch:9200
+    volumes:
+      - ./demo:/demo:ro
+    entrypoint: ["sh", "/demo/seed.sh"]
+
+  explorer:
+    build: .
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ELASTIC_LOCAL_URL: http://elasticsearch:9200
+      EXPLORER_ACTIVE_CLUSTER: local
+    ports:
+      - "8090:8090"

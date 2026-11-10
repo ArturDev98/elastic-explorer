@@ -1,0 +1,24 @@
+{
+  "mappings": {
+    "properties": {
+      "customerId": { "type": "keyword" },
+      "documentNumber": { "type": "keyword" },
+      "fullName": { "type": "text", "fields": { "keyword": { "type": "keyword" } } },
+      "email": { "type": "keyword" },
+      "segment": { "type": "keyword" },
+      "active": { "type": "boolean" },
+      "notes": { "type": "text" },
+      "passwordHash": { "type": "keyword" },
+      "createdAt": { "type": "date" },
+      "updatedAt": { "type": "date" },
+      "address": {
+        "properties": {
+          "cityId": { "type": "keyword" },
+          "city": { "type": "keyword" },
+          "line": { "type": "text" },
+          "location": { "type": "geo_point" }
+        }
+      }
+    }
+  }
+}
